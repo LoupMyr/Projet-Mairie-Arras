@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %} {% block title %}{{parent()}}Accueil{% endblock %} {% block body %}
+<h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold"> Bienvenue sur le site de la ville d'Arras</h1>
+<h2 class="text-center text-secondary mb-4 pb-4 display-2"> Présentation de la ville </h2>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
+        <p>
+            Capitale historique et administrative du département du Pas-de-Calais, au cœur de la zone économique agroalimentaire la plus étendue au nord de Paris,
+            chef-lieu du Pas-de-Calais, Arras n'est pourtant, avec ses 41 000 habitants, que la deuxième ville la plus peuplée du département après Calais.
+            Elle est le siège de la communauté urbaine d'Arras, qui regroupe 108 000 habitants sur 46 communes. Avec les villes de l'ancien bassin minier situées
+            un peu plus au nord, elle est directement sous l'influence de l'« aire métropolitaine de Lille », ensemble métropolitain de près de 3,8 millions d'habitants
+            dont le centre, la ville de Lille, ne se trouve qu'à 45 km. Historiquement, Arras était, sous l'Ancien Régime, la capitale de la province de l'Artois,
+            un grand centre religieux et une cité prospère connue pour ses fabrications drapières. Ville universitaire, Arras se caractérise aujourd'hui par sa grande
+            jeunesse : en effet, 33 % des habitants de l’agglomération ont moins de 25 ans. Elle est également célèbre pour son Main Square Festival qui se tient
+            chaque année en juillet et qui est devenu un événement musical majeur en France. Arras est réputée pour ses deux magnifiques places baroques qui forment
+            un ensemble architectural unique au monde, son beffroi et sa Citadelle, tous deux classés au patrimoine mondial de l'UNESCO. Avec 225 édifices protégés
+            au titre des monuments historiques, Arras est la ville avec la densité de monuments la plus importante de France.
+        </p>
+        <a href="https://fr.wikipedia.org/wiki/Arras"> Référence Wikipedia</a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 p-4 m-0 text-primary">
+        {% set total=0 %}
+        {% for avis in avis %}
+        {% set total = total + avis.note %}
+        {% endfor %}
+        {% set moyenne = total / avis | length %}
+        <div class="row justify-content-center">
+            <div class="col-8 col-md-6 bg-white p-2 m-2 text-primary">
+                <h4 class="text-center">La moyenne des notes donné pour notre ville est de {{moyenne}} !</h4><br>
+                <h4 class="text-center"> Liste des avis sur la ville d'Arras:</h4>
+            </div>
+        </div><br>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr class="bg-secondary fw-bold text-primary">
+                        <th scope="col">Prenom</th>
+                        <th scope="col">Note</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Date d'envoi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for avis in avis %}
+                    <tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }}">
+                        <td>{{avis.prenom}}.{{ avis.nom | slice(0,1) | capitalize}}</td>
+                        <td>{{ avis.note | lower }} / 5</td>
+                        <td>{{ avis.message | lower }}</td>
+                        <td>{{ avis.dateEnvoi | date("d-m-Y à H:i:s") }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8 col-md-6 bg-white p-2 m-2 text-primary">
+                <p class="text-center">Si vous aussi vous souhaitez laisser un avis sur la ville d'Arras, il suffit de vous connecter et de vous rendre <a href="{{path('avis')}}">ici</a> !</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

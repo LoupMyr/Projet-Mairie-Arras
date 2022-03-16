@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{parent()}}Contact
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold">Cantine</h1>
+        <div class="col-10 text-primary">
+            <div class="row justify-content-center">
+                <div class="col-5 col-md-5 bg-white p-2 m-2 text-primary">
+                    <p class="text-center">La ville d'Arras vous propose de réserver un repas à la cantine pour une école spécifique le jour que vous souhaitez ! Pour cela , il vous suffit
+                        de remplir ce formulaire:
+                    </p>
+                </div>
+            </div>
+            {{form(form)}}
+        </div>
+    </div>
+</div>
+{% endblock %}

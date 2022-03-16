@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{parent()}}Liste des demandes de carte d'identité
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold">
+        Liste des demandes de carte d'identité</h1>
+
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="fw-bold text-primary">
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prenom</th>
+                            <th scope="col">Date de naissance</th>
+                            <th scope="col">Lieu de naissance</th>
+                            <th scope="col">Adresse</th>
+                            <th scope="col">Code postal</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for identite in identite%}
+                        <tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }}">
+                            <td>{{ identite.nom | capitalize }}</td>
+                            <td>{{ identite.prenom | capitalize }}</td>
+                            <td>{{ identite.dateNaissance | date("d-m-Y")  }}</td>
+                            <td>{{ identite.lieuNaissance | lower }}</td>
+                            <td>{{ identite.adresse | lower }}</td>
+                            <td>{{ identite.codePostal | lower }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

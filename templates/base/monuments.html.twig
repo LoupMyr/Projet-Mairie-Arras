@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %} {% block title %}{{parent()}}Monuments{% endblock %} {% block body %}
+<link rel="stylesheet" href="/Site1/public/css/style.css">
+
+<h1 class="text-center text-primary mt-4 pt-4 display-1 fw-bold"> Monuments, lieux et événements à ne pas manquer !</h1>
+<div class="row justify-content-center ">
+    <div id="maDiv" class=" col-12 col-md-8 bg-white p-4 m-0 text-primary">
+        <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/Site1/templates/base/beffroi.jpg" alt="Beffroi Arras" class="d-block" style="width:100%" height="80%">
+                    <div class="carousel-caption">
+                        <h3>LeBeffroi d'Arras</h3>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/Site1/templates/base/boves.jpg" alt="Boves Arras" class="d-block" style="width:100%" height="80%">
+                    <div class="carousel-caption">
+                        <h3>Les Boves d'Arras</h3>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/Site1/templates/base/theatre.jpg" alt="Theatre Arras" class="d-block" style="width:100%" height="80%">
+                    <div class="carousel-caption">
+                        <h3>Le théâtre d'Arras</h3>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div><br>
+
+        <h3>Le Beffroi d'Arras</h3>
+        <p> Surplombant l'hôtel de ville, le beffroi est inscrit depuis le 15 juillet 2005 sur la liste du patrimoine mondial de l'UNESCO et a été élu
+            Monument Préféré des Français. Vous pourrez monter à la première couronne du beffroi grâce à un ascenseur (suivi d'une quarantaine de marches).
+            Perché à 55 mètres de hauteur, vous profiterez de la vue spectaculaire sur la ville et ses environs. L'édifice est surmonté d'un lion,
+            un hommage à Louis XIV qui rattacha la ville d'Arras à la France.
+        </p><br>
+        <h3>Les Boves d'Arras</h3>
+        <p> Découvrez l'histoire souterraine d'Arras en plongeant dans l'atmosphère des carrières de pierre calcaire, creusées à partir du Xe siècle dans les sous-sols de la ville. D'abord lieu d'extraction et de sueur, ces boves deviennent des caves et des entrepôts pour les marchands des places, puis devient un abri pour la population d'Arras lors des bombardements de la Seconde Guerre mondiale. Haut lieu de l'histoire de la ville, passionnant et fascinant. Une promenade originale dans les entrailles de la ville. Petit conseil : couvrez-vous, il peut y faire froid.</p>
+        <br>
+        <h3>Le théâtre d'Arras</h3>
+        <p>Bâti en 1785 à l'endroit même où se trouvait le marché aux poissons, cet édifice est l'une des plus belles représentations de théâtre à l'italienne de l'époque.Sa façade est inscrite aux monuments historiques. Il est possible de le visiter gratuitement via l'office de tourisme. N'hésitez pas à les contacter pour admirer de vos yeux l'intérieur du monument. Vous aurez le privilège d'en arpenter les couloirs, d'accéder aux loges, aux balcons et au parterre, de découvrir le foyer et les salles d'interprétation retraçant l'histoire de ce très bel édifice.</p>
+        <br>
+        <div id="carousel2" class="carousel slide" data-bs-ride="carousel">
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carousel2" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carousel2" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carousel2" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/Site1/templates/base/mainSquare.jpg" alt="Main Square Festival" class="d-block" style="width:100%" height="80%">
+                    <div class="carousel-caption">
+                        <h3>Main Square Festival</h3>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/Site1/templates/base/embrasement.jpg" alt="L'Embrassement du Beffroi" class="d-block" style="width:100%" height="80%">
+                    <div class="carousel-caption">
+                        <h3>L'Embrassement du Beffroi</h3>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/Site1/templates/base/marche_de_noel_arras.jpg" alt="Le marché de Noël d'Arras" class="d-block" style="width:100%" height="80%">
+                    <div class="carousel-caption">
+                        <h3>Le marché de Noël d'Arras</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Left and right controls/icons -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel2" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel2" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div><br>
+
+        <h3>Main Square Festival</h3>
+
+        <p>Début juillet, le cœur de la Citadelle d’Arras bat comme tous les ans au rythme du Main Square Festival.
+            Pendant trois jours, les plus grands noms de la scène actuelle internationale attirent une foule hétéroclite pour le plus grand rendez-vous
+            musical au nord de Paris. Soit une succession de concerts pour une ambiance incomparable. Avec une moyenne de 125 000 spectateurs sur trois jours,
+            le Main Square Festival d’Arras est le premier événement musical au nord de Paris. Le cap symbolique du million de spectateurs a été franchi en 2017.
+            Initialement installé sur la Grand’Place d’Arras (2004-2009), le Main Square se tient désormais au sein de la citadelle d’Arras. Chaque été, des fans
+            venus de toute l’Europe investissent cet écrin à ciel ouvert inscrit sur la liste du patrimoine mondial Unesco. Les deux scènes ont accueilli
+            les plus grands noms de la scène pop-rock internationale : Radiohead, Depêche Mode, Lenny Kravitz, Metallica, Sting ou encore Muse. De l’aveu même des stars,
+            le succès de l’événement tient autant à la majesté des lieux qu’à son incroyable acoustique.
+        </p><br>
+
+        <h3>L'Embrassement du Beffroi</h3>
+
+        <p>Un feu d'artifice pas comme les autres pour célébrer la ville et son beffroi et clore les fêtes d'Arras. Chaque année, des milliers de personnes se retrouvent
+            sur la place des Héros pour assister à ce spectacle pyrotechnique "flamboyant" !
+        </p><br>
+
+        <h3>Le marché de Noël d'Arras</h3>
+
+        <p>Le marché de Noël d’Arras transforme chaque année la Grand’Place en cité de Noël féérique. Le plus grand marché de Noël de la région Hauts-de-France
+            est surtout une parenthèse merveilleuse à vivre en famille. Voici les 5 raisons pour lesquelles vous allez forcément succomber à la magie de Noël arrageoise.
+            Vous ne pouvez pas rêver plus bel endroit pour célébrer Noël. Se promener dans le marché de Noël d’Arras, c’est un peu comme pénétrer dans une boule à neige
+            géante ! Les chalets forment une petite cité merveilleuse, tapissée de rouge et encadrée par les superbes maisons à pignons baroques flamands.
+            Des illuminations par milliers, des sapins par centaines, des manèges et attractions foraines étonnantes : il y a de la magie dans l’air au marché de Noël
+            d’Arras. Au marché de Noël d’Arras, il y a des produits régionaux bien sûr : du foie gras, du miel, des fromages, des bonbons, du café, du chocolat,
+            des confits et soupes d’endives. Mais aussi des évasions gourmandes venues d’ailleurs comme les fameux sandwiches alsaciens, la tartiflette de Haute-Savoie,
+            ou les gâteaux polonais. Incontournables, le Winter bar et sa tour illuminée et le Grizzly Bar vous attendent pour vous réchauffer d’un traditionnel vin chaud.
+            t bien sûr, une coupe de champagne accompagnée de quelques huîtres : c’est le must pour savourer l’élégance festive arrageoise !
+        </p>
+    </div>
+</div>
+{% endblock %}
