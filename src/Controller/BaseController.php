@@ -16,15 +16,16 @@ use App\Form\CantineType;
 use App\Entity\Cantine;
 use App\Form\IdentiteType;
 use App\Entity\Identite;
-
+use Symfony\Component\String\Slugger\SluggerInterface;
         
 class BaseController extends AbstractController
 {
     #[Route('/index', name: 'index')]
     public function index(): Response
     {
-        $repoAvis = $this->getDoctrine()->getRepository(avis::class);
+        $repoAvis = $this->getDoctrine()->getRepository(Avis::class);
         $avis = $repoAvis->findAll();
+      
         return $this->render('base/index.html.twig', [
             'avis' => $avis
         ]);
@@ -130,7 +131,7 @@ public function contact(Request $request, MailerInterface $mailer): Response
 
 
     #[Route('/private-identite', name: 'identite')]
-    public function identite(Request $request): Response
+    public function identite(Request $request, SluggerInterface $slugger): Response
     {
         $identite = new Identite();
         $form = $this->createForm(IdentiteType::class, $identite);
@@ -144,18 +145,35 @@ public function contact(Request $request, MailerInterface $mailer): Response
                 $identite->getLieuNaissance();
                 $identite->getAdresse();
                 $identite->getCodePostal();
-
+                $domicile = $form->get('domicile')->getData();  
+                $carte = $form->get('carte')->getData();                                            
+                if($domicile && $carte){               
+                    $nomDomicile = pathinfo($domicile->getClientOriginalName(), PATHINFO_FILENAME);                 
+                    $nomDomicile = $slugger->slug($nomDomicile);                 
+                    $nomDomicile = $nomDomicile.'-'.uniqid().'.'.$domicile->guessExtension();                    
+                    $nomCarte = pathinfo($carte->getClientOriginalName(), PATHINFO_FILENAME);                 
+                    $nomCarte = $slugger->slug($nomCarte);                 
+                    $nomCarte = $nomCarte.'-'.uniqid().'.'.$carte->guessExtension();                    
+                    try{        
+                        $domicile->move($this->getParameter('file_directory'), $nomDomicile);                               
+                        $carte->move($this->getParameter('file_directory'), $nomCarte);                        
+                        $this->addFlash('notice', 'Fichiers envoyé');
+                    }                                  
+                        catch(FileException $e){                        
+                            $this->addFlash('notice', 'Erreur d\'envoi');                    
+                        }                        
+                }
+            }                
             $em = $this->getDoctrine()->getManager();
             $em->persist($identite);
             $em->flush();
-
+        }
             $this->addFlash('notice','Demande effectué');
             return $this->redirectToRoute('identite');
-         }
-    }
 
     return $this->render('base/identite.html.twig', [
         'form' => $form->createView()
     ]);
-}    
+   
+}
 }

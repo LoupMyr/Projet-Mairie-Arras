@@ -31,6 +31,14 @@ class Identite
     #[ORM\Column(type: 'integer')]
     private $codePostal;
 
+    #[ORM\ManyToOne(targetEntity: Fichier::class, inversedBy: 'identites')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $domicile;
+
+    #[ORM\ManyToOne(targetEntity: Fichier::class, inversedBy: 'identites')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $carte;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +112,30 @@ class Identite
     public function setCodePostal(int $codePostal): self
     {
         $this->codePostal = $codePostal;
+
+        return $this;
+    }
+
+    public function getDomicile(): ?Fichier
+    {
+        return $this->domicile;
+    }
+
+    public function setDomicile(?Fichier $domicile): self
+    {
+        $this->domicile = $domicile;
+
+        return $this;
+    }
+
+    public function getCarte(): ?Fichier
+    {
+        return $this->carte;
+    }
+
+    public function setCarte(?Fichier $carte): self
+    {
+        $this->carte = $carte;
 
         return $this;
     }

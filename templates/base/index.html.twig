@@ -44,6 +44,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if avis > 0 %}
                     {% for avis in avis %}
                     <tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }}">
                         <td>{{avis.prenom}}.{{ avis.nom | slice(0,1) | capitalize}}</td>
@@ -52,6 +53,7 @@
                         <td>{{ avis.dateEnvoi | date("d-m-Y à H:i:s") }}</td>
                     </tr>
                     {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
