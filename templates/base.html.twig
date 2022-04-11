@@ -35,7 +35,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{path('contact')}}">Contactez nous</a>
                     </li>
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+                    {% if is_granted('ROLE_USER')%}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{path('avis')}}">Avis</a>
                     </li>
@@ -45,6 +47,10 @@
                             <a class="dropdown-item" href="{{path('cantine')}}">Réservation cantine</a>
                             <a class="dropdown-item" href="{{path('identite')}}">Demande carte d'identité</a>
                     </li>
+
+                    {% endif %}
+                    {% if is_granted('ROLE_MOD')%}
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Listes des demandes</a>
                         <div class="dropdown-menu">
@@ -53,6 +59,7 @@
                             <a class="dropdown-item" href="{{path('liste-identite')}}">Demande carte d'identité</a>
                     </li>
                     {% endif %}
+
                 </ul>
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="nav-item"><a class="nav-link text-white" href="{{path('app_login')}}">Se connecter</a></li>

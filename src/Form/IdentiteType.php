@@ -25,8 +25,29 @@ class IdentiteType extends AbstractType
         ->add('LieuNaissance', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('Adresse', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('CodePostal', NumberType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
-        ->add('domicile', FileType::class, array('label' => 'Fichier à télécharger'))
-        ->add('carte', FileType::class, array('label' => 'Fichier à télécharger'))
+        ->add('domicile', FileType::class, array('mapped'=>false, 'label' => 'Veuillez importer un justificatif de domicile ',      
+        'constraints' => [                
+            new File([                    
+                'maxSize' => '200k',                    
+                'mimeTypes' => [                        
+                    'application/pdf',                        
+                    'application/x-pdf',                                           
+                ],                    
+                'mimeTypesMessage' => 'Le site accepte uniquement les fichiers PDF. ',                
+                ])            
+            ],)) 
+        ->add('carte', FileType::class, array('mapped'=>false,'label' => 'Veuillez importer votre ancienne CI ',      
+        'constraints' => [                
+            new File([                    
+                'maxSize' => '200k',                    
+                'mimeTypes' => [                        
+                    'application/pdf',                        
+                    'application/x-pdf',                        
+                    'image/jpeg',                                            
+                ],                    
+                'mimeTypesMessage' => 'Le site accepte uniquement les fichiers PDF, JPG. ',                
+                ])            
+            ],)) 
 
         ->add('Soumettre', SubmitType::class, ['attr' => ['class'=> 'btn bg-primary text-white m-4' ], 'row_attr' => ['class' => 'text-center'],])
         

@@ -20,14 +20,14 @@
                     <tbody>
                         {% for contact in contacts |sort((a, b) => b.dateEnvoi
                         <=> a.dateEnvoi) %}
-                            <tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }}">
-                                <td>{{ contact.nom | capitalize }}</td>
-                                <td>{{ contact.sujet | capitalize }}</td>
-                                <td>{{ contact.email | lower }}</td>
-                                <td>{{ contact.dateEnvoi | date("d-m-Y à H:i:s") }}</td>
+                        <tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }}">
+                            <td>{{ contact.nom | capitalize }}</td>
+                            <td>{{ contact.sujet | capitalize }}</td>
+                            <td>{{ contact.email | lower }}</td>
+                            <td>{{ contact.dateEnvoi | date("d-m-Y à H:i:s") }}</td>
 
-                            </tr>
-                            {% endfor %}
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
