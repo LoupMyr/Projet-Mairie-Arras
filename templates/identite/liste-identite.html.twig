@@ -22,6 +22,8 @@
                             <th scope="col">Lieu de naissance</th>
                             <th scope="col">Adresse</th>
                             <th scope="col">Code postal</th>
+                            <th scope="col">Accepter</th>
+                            <th scope="col">Carte Dispo</th>
 
                         </tr>
                     </thead>
@@ -34,6 +36,8 @@
                             <td>{{ identite.lieuNaissance | lower }}</td>
                             <td>{{ identite.adresse | lower }}</td>
                             <td>{{ identite.codePostal | lower }}</td>
+                            <td><a href="{{path('accepter-demande', {'id':identite.id})}}"><i class="bi bi-send-check-fill"></i></td>
+                            <td><a href="{{path('carte-recu', {'id':identite.id})}}"><i class="bi bi-cart-check-fill"></i></td>
                         </tr>
                         {% endfor %}
                     </tbody>

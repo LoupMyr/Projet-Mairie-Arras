@@ -39,6 +39,9 @@ class Identite
     #[ORM\JoinColumn(nullable: false)]
     private $carte;
 
+    #[ORM\Column(type: 'string', length: 100)]
+    private $email;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +139,18 @@ class Identite
     public function setCarte(?Fichier $carte): self
     {
         $this->carte = $carte;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\File;
@@ -21,14 +22,14 @@ class IdentiteType extends AbstractType
         $builder
         ->add('Nom', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('Prenom', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
+        ->add('Email', EmailType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('DateNaissance', BirthdayType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('LieuNaissance', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('Adresse', TextType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('CodePostal', NumberType::class, ['attr' => ['class'=> 'form-control'], 'label_attr' => ['class'=> 'fw-bold']])
         ->add('domicile', FileType::class, array('mapped'=>false, 'label' => 'Veuillez importer un justificatif de domicile ',      
         'constraints' => [                
-            new File([                    
-                'maxSize' => '200k',                    
+            new File([                                        
                 'mimeTypes' => [                        
                     'application/pdf',                        
                     'application/x-pdf',                                           
@@ -38,8 +39,7 @@ class IdentiteType extends AbstractType
             ],)) 
         ->add('carte', FileType::class, array('mapped'=>false,'label' => 'Veuillez importer votre ancienne CI ',      
         'constraints' => [                
-            new File([                    
-                'maxSize' => '200k',                    
+            new File([                                        
                 'mimeTypes' => [                        
                     'application/pdf',                        
                     'application/x-pdf',                        

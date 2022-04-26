@@ -175,12 +175,15 @@ public function contact(Request $request, MailerInterface $mailer): Response
                         $em->persist($f);
                         $em->persist($ff);
                         $em->flush();
+                        $identite -> getDomicile($f);
+                        $identite -> getCarte($ff);
                     }                               
                     catch(FileException $e){                        
                             $this->addFlash('notice', 'Erreur d\'envoi');                    
                         } 
                 $identite->getNom();
                 $identite->getPrenom();
+                $identite->getEmail();
                 $identite->getDateNaissance();
                 $identite->getLieuNaissance();
                 $identite->getAdresse();
@@ -196,9 +199,8 @@ public function contact(Request $request, MailerInterface $mailer): Response
                 ]); 
                 $this->addFlash('notice', 'Fichiers envoyé'); 
                 }
-            }   
-            $identite -> setDomicile($f);
-            $identite -> setCarte($ff);      
+            }
+            $em = $this->getDoctrine()->getManager();
             $em->persist($identite);
             $em->flush();
             $mailer->send($email);
