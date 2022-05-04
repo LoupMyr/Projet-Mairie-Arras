@@ -37,9 +37,17 @@ class Fichier
     #[ORM\OneToMany(mappedBy: 'domicile', targetEntity: Identite::class, orphanRemoval: true)]
     private $identites;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'fichiersPartager')]
+    private $partager;
+
+    #[ORM\OneToMany(mappedBy: 'fichier', targetEntity: Telecharger::class, orphanRemoval: true)]
+    private $telechargers;
+
     public function __construct()
     {
         $this->identites = new ArrayCollection();
+        $this->partager = new ArrayCollection();
+        $this->telechargers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +151,60 @@ class Fichier
             // set the owning side to null (unless already changed)
             if ($identite->getDomicile() === $this) {
                 $identite->setDomicile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getPartager(): Collection
+    {
+        return $this->partager;
+    }
+
+    public function addPartager(User $partager): self
+    {
+        if (!$this->partager->contains($partager)) {
+            $this->partager[] = $partager;
+        }
+
+        return $this;
+    }
+
+    public function removePartager(User $partager): self
+    {
+        $this->partager->removeElement($partager);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Telecharger[]
+     */
+    public function getTelechargers(): Collection
+    {
+        return $this->telechargers;
+    }
+
+    public function addTelecharger(Telecharger $telecharger): self
+    {
+        if (!$this->telechargers->contains($telecharger)) {
+            $this->telechargers[] = $telecharger;
+            $telecharger->setFichier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTelecharger(Telecharger $telecharger): self
+    {
+        if ($this->telechargers->removeElement($telecharger)) {
+            // set the owning side to null (unless already changed)
+            if ($telecharger->getFichier() === $this) {
+                $telecharger->setFichier(null);
             }
         }
 

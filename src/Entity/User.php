@@ -47,9 +47,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
     private $fichiers;
 
+    #[ORM\ManyToMany(targetEntity: Fichier::class, mappedBy: 'partager')]
+    private $fichiersPartager;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Telecharger::class, orphanRemoval: true)]
+    private $telechargers;
+
     public function __construct()    
     {
-        $this->fichiers = new ArrayCollection();    
+        $this->fichiers = new ArrayCollection();
+        $this->fichiersPartager = new ArrayCollection();
+        $this->telechargers = new ArrayCollection();    
     }
 
     public function getId(): ?int    
@@ -190,4 +198,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }        
     return $this;    
 }
+
+    /**
+     * @return Collection|Fichier[]
+     */
+    public function getFichiersPartager(): Collection
+    {
+        return $this->fichiersPartager;
+    }
+
+    public function addFichiersPartager(Fichier $fichiersPartager): self
+    {
+        if (!$this->fichiersPartager->contains($fichiersPartager)) {
+            $this->fichiersPartager[] = $fichiersPartager;
+            $fichiersPartager->addPartager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFichiersPartager(Fichier $fichiersPartager): self
+    {
+        if ($this->fichiersPartager->removeElement($fichiersPartager)) {
+            $fichiersPartager->removePartager($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Telecharger[]
+     */
+    public function getTelechargers(): Collection
+    {
+        return $this->telechargers;
+    }
+
+    public function addTelecharger(Telecharger $telecharger): self
+    {
+        if (!$this->telechargers->contains($telecharger)) {
+            $this->telechargers[] = $telecharger;
+            $telecharger->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTelecharger(Telecharger $telecharger): self
+    {
+        if ($this->telechargers->removeElement($telecharger)) {
+            // set the owning side to null (unless already changed)
+            if ($telecharger->getUser() === $this) {
+                $telecharger->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

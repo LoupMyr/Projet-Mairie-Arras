@@ -175,19 +175,19 @@ public function contact(Request $request, MailerInterface $mailer): Response
                         $em->persist($f);
                         $em->persist($ff);
                         $em->flush();
-                        $identite -> getDomicile($f);
-                        $identite -> getCarte($ff);
+                        $identite -> setDomicile($f);
+                        $identite -> setCarte($ff);
                     }                               
                     catch(FileException $e){                        
                             $this->addFlash('notice', 'Erreur d\'envoi');                    
                         } 
-                $identite->getNom();
-                $identite->getPrenom();
-                $identite->getEmail();
-                $identite->getDateNaissance();
-                $identite->getLieuNaissance();
-                $identite->getAdresse();
-                $identite->getCodePostal();
+                $identite->setNom($form->get('Nom')->getData());
+                $identite->setPrenom($form->get('Prenom')->getData());
+                $identite->setEmail($form->get('Email')->getData());
+                $identite->setDateNaissance($form->get('DateNaissance')->getData());
+                $identite->setLieuNaissance($form->get('LieuNaissance')->getData());
+                $identite->setAdresse($form->get('Adresse')->getData());
+                $identite->setCodePostal($form->get('CodePostal')->getData());
                 $email = (new TemplatedEmail())
                 ->from($this->getUser()->getEmail())
                 ->to('loupmayeur2003@gmail.com')
@@ -198,6 +198,7 @@ public function contact(Request $request, MailerInterface $mailer): Response
                     'id'=> $identite->getId(),
                 ]); 
                 $this->addFlash('notice', 'Fichiers envoyé'); 
+
                 }
             }
             $em = $this->getDoctrine()->getManager();
