@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
+        <div class="card text-center" style="width:400px;display:inline-block;vertical-align:top;">
+            <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:75%">
+            <div class="card-body">
+                <h5 class="card-title">{{app.user.email}}</h5>
+            </div>
+
+        </div>
+        <div style="display:inline-block;padding-left:250px">
+            {% set total=0 %}
+            {% set nbType1=0 %}
+            {% set nbType2=0 %}
+            {% set nbType3=0 %}
+            {% set nbDemande=0 %}
+            {% set nbTODO=0 %}
+
+            {% for notif in notifs %}
+            {% if notif.type == 0 %}
+            {% set nbTODO = nbTODO + 1 %}
+            {% endif %}
+            {% if notif.user.user.id == app.user.id %}
+            {% set total=total+1 %}
+
+            {% if notif.type == 1 %}
+            {% set nbType1 = nbType1 + 1 %}
+            {% endif %}
+
+            {% if notif.type == 2 %}
+            {% set nbType2 = nbType2 + 1 %}
+            {% endif %}
+
+            {% if notif.type == 3 %}
+            {% set nbType3 = nbType3 + 1 %}
+            {% endif %}
+
+            {% if notif.type == 0 %}
+            {% set nbDemande = nbDemande + 1 %}
+            {% endif %}
+
+            {% endif %}
+            {% endfor %}
+            <h4>Vos notifications <span class="badge rounded-pill bg-danger">{{total}}</span></h4>
+            <br>
+            <div class="btn-group" style="display:inline-block;">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                        Demandes en attente <span class="badge bg-danger">{{nbDemande}}</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for notif in notifs %}
+                        {% if notif.user.user.id == app.user.id %}
+                        {% if notif.type == 0 %}
+                        <li>{{notif.message | capitalize}} </li>
+                        <li>{{notif.user.email}} </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <br>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                        Demandes acceptées <span class="badge bg-danger">{{nbType1}}</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for notif in notifs %}
+                        {% if notif.user.user.id == app.user.id %}
+                        {% if notif.type == 1 %}
+                        <li>{{notif.message | capitalize}} </li>
+                        <li>{{notif.user.email}} </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <br>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                        Cartes reçues <span class="badge bg-danger">{{nbType2}}</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for notif in notifs %}
+                        {% if notif.user.user.id == app.user.id %}
+                        {% if notif.type == 2 %}
+                        <li>{{notif.message | capitalize}} </li>
+                        <li>{{notif.user.email}} </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <br>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                        Demandes rejetées <span class="badge bg-danger">{{nbType3}}</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for notif in notifs %}
+                        {% if notif.user.user.id == app.user.id %}
+                        {% if notif.type == 3 %}
+                        <li>{{notif.message | capitalize}}<a href="{{path('modif-identite', {'id':notif.user.id})}}">Cliquez ici pour compléter votre demande</a></li>
+                        <li>{{notif.user.email}} </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        <br>
+
+                        {% if is_granted('ROLE_MOD') %}
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                Demandes à traiter<span class="badge bg-danger">{{nbTODO}}</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% for notif in notifs %}
+                                {% if notif.type == 0 %}
+                                <li>{{notif.message | capitalize}} </li>
+                                <li>{{notif.user.email}} </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

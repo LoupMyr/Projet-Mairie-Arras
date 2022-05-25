@@ -65,8 +65,11 @@
                 <li class="nav-item"><a class="nav-link text-white" href="{{path('app_login')}}">Se connecter</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="{{path('app_register')}}">S'inscrire</a></li>
                 {% else %}
-                <li class="nav-item"><a class="nav-link text-white" href="{{path('app_logout')}}"> {{app.user.email}}<i class="bi bi-x-circle-fill text-white"></i>
-                    </a>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{path('profil')}}">{{app.user.email}}</a>
+                </li>
+                <li>
+                    <a class="nav-link text-white" href="{{path('app_logout')}}"> <i class="bi bi-x-circle-fill text-white"></i></a>
                 </li>
                 {% endif %}
             </div>

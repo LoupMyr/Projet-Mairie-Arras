@@ -40,14 +40,10 @@ class Fichier
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'fichiersPartager')]
     private $partager;
 
-    #[ORM\OneToMany(mappedBy: 'fichier', targetEntity: Telecharger::class, orphanRemoval: true)]
-    private $telechargers;
-
     public function __construct()
     {
         $this->identites = new ArrayCollection();
         $this->partager = new ArrayCollection();
-        $this->telechargers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,36 +173,6 @@ class Fichier
     public function removePartager(User $partager): self
     {
         $this->partager->removeElement($partager);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Telecharger[]
-     */
-    public function getTelechargers(): Collection
-    {
-        return $this->telechargers;
-    }
-
-    public function addTelecharger(Telecharger $telecharger): self
-    {
-        if (!$this->telechargers->contains($telecharger)) {
-            $this->telechargers[] = $telecharger;
-            $telecharger->setFichier($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTelecharger(Telecharger $telecharger): self
-    {
-        if ($this->telechargers->removeElement($telecharger)) {
-            // set the owning side to null (unless already changed)
-            if ($telecharger->getFichier() === $this) {
-                $telecharger->setFichier(null);
-            }
-        }
 
         return $this;
     }

@@ -53,11 +53,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Telecharger::class, orphanRemoval: true)]
     private $telechargers;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Identite::class, orphanRemoval: true)]
+    private $identites;
+
     public function __construct()    
     {
         $this->fichiers = new ArrayCollection();
         $this->fichiersPartager = new ArrayCollection();
-        $this->telechargers = new ArrayCollection();    
+        $this->telechargers = new ArrayCollection();
+        $this->identites = new ArrayCollection();    
     }
 
     public function getId(): ?int    
@@ -250,6 +254,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($telecharger->getUser() === $this) {
                 $telecharger->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Identite[]
+     */
+    public function getIdentites(): Collection
+    {
+        return $this->identites;
+    }
+
+    public function addIdentite(Identite $identite): self
+    {
+        if (!$this->identites->contains($identite)) {
+            $this->identites[] = $identite;
+            $identite->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdentite(Identite $identite): self
+    {
+        if ($this->identites->removeElement($identite)) {
+            // set the owning side to null (unless already changed)
+            if ($identite->getUser() === $this) {
+                $identite->setUser(null);
             }
         }
 

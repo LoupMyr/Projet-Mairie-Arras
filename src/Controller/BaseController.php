@@ -19,6 +19,7 @@ use App\Form\IdentiteType;
 use App\Entity\Identite;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Entity\Fichier;
+use App\Entity\Notif;
         
 class BaseController extends AbstractController
 {
@@ -188,10 +189,12 @@ public function contact(Request $request, MailerInterface $mailer): Response
                 $identite->setLieuNaissance($form->get('LieuNaissance')->getData());
                 $identite->setAdresse($form->get('Adresse')->getData());
                 $identite->setCodePostal($form->get('CodePostal')->getData());
+                $identite->setUser($this->getUser());
+                $identite->setTerminer(false);
                 $email = (new TemplatedEmail())
                 ->from($this->getUser()->getEmail())
                 ->to('loupmayeur2003@gmail.com')
-                ->subject("Nouveau dossier identifiant")
+                ->subject("Nouveau dossier")
                 ->htmlTemplate('emails/dossier.html.twig')
                 ->context([
                     'nom'=> $identite->getNom(),
@@ -201,11 +204,105 @@ public function contact(Request $request, MailerInterface $mailer): Response
 
                 }
             }
+            $notif = new Notif();
+            $notif -> setMessage('Demande de carte d\'identité reçu.');
+            $notif -> setUser($identite);
+            $notif -> setType(0);
             $em = $this->getDoctrine()->getManager();
             $em->persist($identite);
+            $em->persist($notif);
             $em->flush();
             $mailer->send($email);
             $this->addFlash('notice','Demande effectué');
+            return $this->redirectToRoute('identite');
+        }
+           
+
+        return $this->render('base/identite.html.twig', [
+        'form' => $form->createView()
+    ]);
+   
+    }
+
+    #[Route('/profile-modif-identite/{id}', name: 'modif-identite', requirements: ["id"=>"\d+"] )]
+    public function modifIdentite(Request $request, SluggerInterface $slugger, MailerInterface $mailer, int $id): Response
+    {
+        $identite = $this->getDoctrine()->getRepository(Identite::class)->find($id);
+        $form = $this->createForm(IdentiteType::class, $identite);
+
+        if($request->isMethod('POST')){
+            $form->handleRequest($request);
+            $domicile = $form->get('domicile')->getData();
+            $carte = $form->get('carte')->getData();
+            if ($form->isSubmitted()&&$form->isValid()){
+                if($domicile && $carte){      
+                    $domicile = $form->get('domicile')->getData();
+                    $carte = $form->get('carte')->getData();                                                  
+                    $nomDomicile = pathinfo($domicile->getClientOriginalName(),PATHINFO_FILENAME);                    
+                    $nomDomicile = $slugger->slug($nomDomicile);                    
+                    $nomDomicile = $nomDomicile.'-'.uniqid().'.'.$domicile->guessExtension();
+
+                    $nomCarte = pathinfo($carte->getClientOriginalName(),PATHINFO_FILENAME);                    
+                    $nomCarte = $slugger->slug($nomCarte);                    
+                    $nomCarte = $nomCarte.'-'.uniqid().'.'.$carte->guessExtension();                     
+                    try{                              
+                        $f = new Fichier(); 
+                        $f->setNomServeur($nomDomicile);                        
+                        $f->setNomOriginal($domicile->getClientOriginalName());                        
+                        $f->setDateEnvoi(new \Datetime());                        
+                        $f->setExtension($domicile->guessExtension());                        
+                        $f->setTaille($domicile->getSize());                        
+                        $f->setProprietaire($this->getUser());                        
+                        $domicile->move($this->getParameter('file_directory'), $nomDomicile);
+                        
+                        $ff = new Fichier(); 
+                        $ff->setNomServeur($nomCarte);                        
+                        $ff->setNomOriginal($carte->getClientOriginalName());                        
+                        $ff->setDateEnvoi(new \Datetime());                        
+                        $ff->setExtension($carte->guessExtension());                        
+                        $ff->setTaille($carte->getSize());                        
+                        $ff->setProprietaire($this->getUser());                        
+                        $carte->move($this->getParameter('file_directory'), $nomCarte);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($f);
+                        $em->persist($ff);
+                        $em->flush();
+                        $identite -> setDomicile($f);
+                        $identite -> setCarte($ff);
+                    }                               
+                    catch(FileException $e){                        
+                            $this->addFlash('notice', 'Erreur d\'envoi');                    
+                        } 
+                $identite->setNom($form->get('Nom')->getData());
+                $identite->setPrenom($form->get('Prenom')->getData());
+                $identite->setEmail($form->get('Email')->getData());
+                $identite->setDateNaissance($form->get('DateNaissance')->getData());
+                $identite->setLieuNaissance($form->get('LieuNaissance')->getData());
+                $identite->setAdresse($form->get('Adresse')->getData());
+                $identite->setCodePostal($form->get('CodePostal')->getData());
+                $identite->setUser($this->getUser());
+                $identite->setTerminer(false);
+                $email = (new TemplatedEmail())
+                ->from($this->getUser()->getEmail())
+                ->to('loupmayeur2003@gmail.com')
+                ->subject("Nouveau dossier")
+                ->htmlTemplate('emails/dossier.html.twig')
+                ->context([
+                    'nom'=> $identite->getNom(),
+                    'id'=> $identite->getId(),
+                ]); 
+                }
+            }
+            $notif = new Notif();
+            $notif -> setMessage('Demande de carte d\'identité reçu.');
+            $notif -> setUser($identite);
+            $notif -> setType(0);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($identite);
+            $em->persist($notif);
+            $em->flush();
+            $mailer->send($email);
+            $this->addFlash('notice','Demande effectué, fichiers envoyés');
             return $this->redirectToRoute('identite');
         }
            

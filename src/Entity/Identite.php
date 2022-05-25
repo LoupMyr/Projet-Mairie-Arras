@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\IdentiteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IdentiteRepository::class)]
@@ -32,15 +34,30 @@ class Identite
     private $codePostal;
 
     #[ORM\ManyToOne(targetEntity: Fichier::class, inversedBy: 'identites')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private $domicile;
 
     #[ORM\ManyToOne(targetEntity: Fichier::class, inversedBy: 'identites')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private $carte;
 
     #[ORM\Column(type: 'string', length: 100)]
     private $email;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Notif::class)]
+    private $notifs;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'identites')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
+    #[ORM\Column(type: 'boolean')]
+    private $terminer;
+
+    public function __construct()
+    {
+        $this->notifs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,7 +134,7 @@ class Identite
         $this->codePostal = $codePostal;
 
         return $this;
-    }
+    } 
 
     public function getDomicile(): ?Fichier
     {
@@ -151,6 +168,60 @@ class Identite
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notif[]
+     */
+    public function getNotifs(): Collection
+    {
+        return $this->notifs;
+    }
+
+    public function addNotif(Notif $notif): self
+    {
+        if (!$this->notifs->contains($notif)) {
+            $this->notifs[] = $notif;
+            $notif->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotif(Notif $notif): self
+    {
+        if ($this->notifs->removeElement($notif)) {
+            // set the owning side to null (unless already changed)
+            if ($notif->getUser() === $this) {
+                $notif->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTerminer(): ?bool
+    {
+        return $this->terminer;
+    }
+
+    public function setTerminer(bool $terminer): self
+    {
+        $this->terminer = $terminer;
 
         return $this;
     }
