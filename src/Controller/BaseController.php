@@ -138,13 +138,13 @@ public function contact(Request $request, MailerInterface $mailer): Response
     {
         $identite = new Identite();
         $form = $this->createForm(IdentiteType::class, $identite);
-
+        $em = $this->getDoctrine()->getManager();
         if($request->isMethod('POST')){
             $form->handleRequest($request);
             $domicile = $form->get('domicile')->getData();
             $carte = $form->get('carte')->getData();
             if ($form->isSubmitted()&&$form->isValid()){
-                if($domicile && $carte){      
+                if($domicile && $carte){ 
                     $domicile = $form->get('domicile')->getData();
                     $carte = $form->get('carte')->getData();                                                  
                     $nomDomicile = pathinfo($domicile->getClientOriginalName(),PATHINFO_FILENAME);                    
@@ -172,7 +172,6 @@ public function contact(Request $request, MailerInterface $mailer): Response
                         $ff->setTaille($carte->getSize());                        
                         $ff->setProprietaire($this->getUser());                        
                         $carte->move($this->getParameter('file_directory'), $nomCarte);
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($f);
                         $em->persist($ff);
                         $em->flush();
@@ -180,8 +179,14 @@ public function contact(Request $request, MailerInterface $mailer): Response
                         $identite -> setCarte($ff);
                     }                               
                     catch(FileException $e){                        
-                            $this->addFlash('notice', 'Erreur d\'envoi');                    
-                        } 
+                        $this->addFlash('notice', 'Erreur d\'envoi');                    
+                    }
+                }
+                $notif = new Notif();
+                $notif -> setMessage('Demande de carte d\'identité reçu.');
+                $notif -> setUser($identite);
+                $notif -> setType(0);
+                $notif->setLu(false);
                 $identite->setNom($form->get('Nom')->getData());
                 $identite->setPrenom($form->get('Prenom')->getData());
                 $identite->setEmail($form->get('Email')->getData());
@@ -191,6 +196,9 @@ public function contact(Request $request, MailerInterface $mailer): Response
                 $identite->setCodePostal($form->get('CodePostal')->getData());
                 $identite->setUser($this->getUser());
                 $identite->setTerminer(false);
+                $em->persist($identite);
+                $em->persist($notif);
+                $em->flush();
                 $email = (new TemplatedEmail())
                 ->from($this->getUser()->getEmail())
                 ->to('loupmayeur2003@gmail.com')
@@ -202,25 +210,15 @@ public function contact(Request $request, MailerInterface $mailer): Response
                 ]); 
                 $this->addFlash('notice', 'Fichiers envoyé'); 
 
-                }
+                $mailer->send($email);
+                $this->addFlash('notice','Demande effectué');
+                return $this->redirectToRoute('identite');
             }
-            $notif = new Notif();
-            $notif -> setMessage('Demande de carte d\'identité reçu.');
-            $notif -> setUser($identite);
-            $notif -> setType(0);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($identite);
-            $em->persist($notif);
-            $em->flush();
-            $mailer->send($email);
-            $this->addFlash('notice','Demande effectué');
-            return $this->redirectToRoute('identite');
         }
            
-
         return $this->render('base/identite.html.twig', [
-        'form' => $form->createView()
-    ]);
+            'form' => $form->createView()
+        ]);
    
     }
 
@@ -312,4 +310,20 @@ public function contact(Request $request, MailerInterface $mailer): Response
     ]);
    
 }
+
+#[Route('/profile-marquer-lu/{id}', name: 'marquer-lu', requirements: ["id"=>"\d+"] )]
+public function marquerLu(Request $request, int $id): Response
+{
+    $notif = $this->getDoctrine()->getRepository(Notif::class)->find($id);
+    $notif -> setLu(true);
+    $em = $this->getDoctrine()->getManager();
+    $em -> persist($notif);
+    $em -> flush();
+    $notifs = $this->getDoctrine()->getRepository(Notif::class)->findAll();
+    return $this->render('profil/profil.html.twig', [
+        'notifs' => $notifs
+    ]);
+
+}
+
 }

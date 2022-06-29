@@ -23,6 +23,9 @@ class Notif
     #[ORM\Column(type: 'integer')]
     private $type;
 
+    #[ORM\Column(type: 'boolean')]
+    private $lu;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Notif
     public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getLu(): ?bool
+    {
+        return $this->lu;
+    }
+
+    public function setLu(bool $lu): self
+    {
+        $this->lu = $lu;
 
         return $this;
     }

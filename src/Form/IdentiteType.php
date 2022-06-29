@@ -32,7 +32,8 @@ class IdentiteType extends AbstractType
             new File([                                        
                 'mimeTypes' => [                        
                     'application/pdf',                        
-                    'application/x-pdf',                                           
+                    'application/x-pdf',
+                    'image/png',                                            
                 ],                    
                 'mimeTypesMessage' => 'Le site accepte uniquement les fichiers PDF. ',                
                 ])            
@@ -43,7 +44,8 @@ class IdentiteType extends AbstractType
                 'mimeTypes' => [                        
                     'application/pdf',                        
                     'application/x-pdf',                        
-                    'image/jpeg',                                            
+                    'image/jpeg',
+                    'image/png',                                           
                 ],                    
                 'mimeTypesMessage' => 'Le site accepte uniquement les fichiers PDF, JPG. ',                
                 ])            

@@ -9,7 +9,7 @@ use App\Entity\Notif;
 
 class ProfilController extends AbstractController
 {
-    #[Route('/profil-profil', name: 'profil')]
+    #[Route('/profile-profil', name: 'profil')]
     public function profil(): Response
     {
         $repoNotif = $this->getDoctrine()->getRepository(Notif::class);
