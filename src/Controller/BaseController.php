@@ -136,7 +136,7 @@ public function contact(Request $request, MailerInterface $mailer): Response
     #[Route('/profile-identite', name: 'identite')]
     public function identite(Request $request, SluggerInterface $slugger, MailerInterface $mailer): Response
     {
-        $identite = new Identite();
+        $identite = new Identite(); 
         $form = $this->createForm(IdentiteType::class, $identite);
         $em = $this->getDoctrine()->getManager();
         if($request->isMethod('POST')){
@@ -325,5 +325,12 @@ public function marquerLu(Request $request, int $id): Response
     ]);
 
 }
+
+#[Route('/error_404', name: 'error_404')]
+    public function error_404(): Response
+    {
+        return $this->render('page_not_found/error_404.html.twig', [
+        ]);
+    }
 
 }
